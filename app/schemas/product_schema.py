@@ -1,0 +1,55 @@
+from marshmallow import Schema, fields, validate
+
+
+class ProductVariantSchema(Schema):
+    color_name = fields.Str(required=True, validate=validate.Length(min=1, max=50))
+    color_hex = fields.Str(validate=validate.Length(max=10))
+    image_url = fields.Str(validate=validate.Length(max=500))
+    stock_quantity = fields.Int(load_default=0, validate=validate.Range(min=0))
+    price_adjustment = fields.Decimal(load_default=0.00)
+    is_active = fields.Bool(load_default=True)
+
+
+class ProductCreateSchema(Schema):
+    name = fields.Str(required=True, validate=validate.Length(min=2, max=200))
+    description = fields.Str()
+    short_description = fields.Str(validate=validate.Length(max=500))
+    sku = fields.Str(validate=validate.Length(max=100))
+    price = fields.Decimal(required=True, validate=validate.Range(min=0))
+    sale_price = fields.Decimal(validate=validate.Range(min=0))
+    stock_quantity = fields.Int(load_default=0, validate=validate.Range(min=0))
+    brand_id = fields.Int()
+    category_id = fields.Int()
+    is_active = fields.Bool(load_default=True)
+    is_featured = fields.Bool(load_default=False)
+    weight = fields.Decimal(validate=validate.Range(min=0))
+    connectivity = fields.Str(validate=validate.Length(max=100))
+    driver_size = fields.Str(validate=validate.Length(max=50))
+    frequency_response = fields.Str(validate=validate.Length(max=100))
+    impedance = fields.Str(validate=validate.Length(max=50))
+    battery_life = fields.Str(validate=validate.Length(max=50))
+    noise_cancellation = fields.Bool(load_default=False)
+    microphone = fields.Bool(load_default=False)
+    variants = fields.List(fields.Nested(ProductVariantSchema))
+
+
+class ProductUpdateSchema(Schema):
+    name = fields.Str(validate=validate.Length(min=2, max=200))
+    description = fields.Str()
+    short_description = fields.Str(validate=validate.Length(max=500))
+    sku = fields.Str(validate=validate.Length(max=100))
+    price = fields.Decimal(validate=validate.Range(min=0))
+    sale_price = fields.Decimal(validate=validate.Range(min=0), allow_none=True)
+    stock_quantity = fields.Int(validate=validate.Range(min=0))
+    brand_id = fields.Int(allow_none=True)
+    category_id = fields.Int(allow_none=True)
+    is_active = fields.Bool()
+    is_featured = fields.Bool()
+    weight = fields.Decimal(validate=validate.Range(min=0), allow_none=True)
+    connectivity = fields.Str(validate=validate.Length(max=100))
+    driver_size = fields.Str(validate=validate.Length(max=50))
+    frequency_response = fields.Str(validate=validate.Length(max=100))
+    impedance = fields.Str(validate=validate.Length(max=50))
+    battery_life = fields.Str(validate=validate.Length(max=50))
+    noise_cancellation = fields.Bool()
+    microphone = fields.Bool()
